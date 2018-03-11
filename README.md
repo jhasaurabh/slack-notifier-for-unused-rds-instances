@@ -1,6 +1,8 @@
 # README
 This script sends the slack notification for rds instances where maximum database connection has not exceeded 3 in last 24 hours.
-You can customize the maximum number of data connections you want to compare the actual metric to by changing the value of CUSTOM_DB_CONN varialble
+
+You can customize the maximum number of database connections you want to compare against the cloudwatch DatabaseConnection metric by changing the value of CUSTOM_DB_CONN varialble
+
 You will also need to update the slack incoming webhook url in SLACK_WEBHOOK_URL variable
 ## PRE REQUISITE
   - You should have awscli installed and configured with following access on your system
