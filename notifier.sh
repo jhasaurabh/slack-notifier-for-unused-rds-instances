@@ -8,11 +8,14 @@ DB_NAME=$(aws cloudwatch list-metrics  --namespace AWS/RDS --metric DatabaseConn
 
 for DB_NAME in $DB_NAME
 do
-	echo checking db connections for $DB_NAME
+	##### gets the number of maximum connection in last 24 hours
 	MAX_CONN=$(aws cloudwatch get-metric-statistics --metric-name DatabaseConnections --start-time $START_TIME --end-time $CURRENT_TIME --period $PERIOD --namespace AWS/RDS --statistics Maximum --dimensions Name=DBInstanceIdentifier,Value=$DB_NAME --output text --query 'Datapoints[0].{Maximum:Maximum}')
+
+	##### Converting the floating point value to int
 	MAX_CONN_INT=${MAX_CONN%.*}
+	
+	##### Checking whether the DB connetion value fetched from cloudwatch is less than $CUSTOM_DB_CONN
 	if [ $MAX_CONN_INT -lt "$CUSTOM_DB_CONN" ]; then
-		echo "max connection on $DB_NAME is $max_con"
-		curl -X POST --data-urlencode 'payload={"text":"max connection on '$DB_NAME' is '$MAX_CONN_INT', you could consider deleting the instance"}' $SLACK_WEBHOOK_URL
+		curl -X POST --data-urlencode 'payload={"text":"max connection on RDS instance '$DB_NAME' is '$MAX_CONN_INT', you should consider deleting the instance"}' $SLACK_WEBHOOK_URL
 	fi
 done

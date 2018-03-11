@@ -26,6 +26,6 @@ You will also need to update the slack incoming webhook url in SLACK_WEBHOOK_URL
 ### USAGE
 Once you have configured the Variables in the script, you can run the script using below command
 ```sh
-    ./get_unused_rds.sh
+    ./notifier.sh
 ```
 
